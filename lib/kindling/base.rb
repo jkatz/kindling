@@ -22,12 +22,12 @@ module Kindling
 
       # configures the connection for the Campfire lobby we are connecting to
       #
-      # * +lobby_name+: the name of the Campfire lobby we want to connect to
+      # * +lobby+: the name of the Campfire lobby we want to connect to
       # * +options:+
       #   * +:ssl+: true if we are connection over SSL.  Defaults to false
-      def initialize_connection(lobby_name, options={})
+      def initialize_connection(lobby, options={})
         options = DEFAULT_CONNECTION_OPTIONS.merge(options)
-        url = URI.parse(uri_for(lobby_name, options))
+        url = URI.parse(uri_for(lobby, options))
         @connection = {
           :host => url.host,
           :port => url.port,
@@ -42,8 +42,7 @@ module Kindling
         raise Errno::ENOENT unless File.exists?(file_path)
         file = File.open(file_path)
         config = symbolize_keys(YAML::load(file.read))
-        p config.inspect
-        self.initialize_connection(config[:lobby_name], config[:options])
+        self.initialize_connection(config[:lobby], config[:options])
       end
 
     private
@@ -59,9 +58,9 @@ module Kindling
         symbol_hash
       end
 
-      def uri_for(lobby_name, options)
+      def uri_for(lobby, options)
         scheme = ssl?(options[:ssl]) ? 'https' : 'http'
-        domain = lobby_name + options[:domain]
+        domain = lobby + options[:domain]
         port = options[:port]
         [scheme, '://', domain, ':', port].join
       end

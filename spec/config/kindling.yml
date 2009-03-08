@@ -1,0 +1,3 @@
+lobby: 'test'
+options:
+  ssl: false
