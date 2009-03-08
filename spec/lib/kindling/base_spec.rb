@@ -34,14 +34,14 @@ describe Kindling::Base, '.initialize_connection' do
     lambda { Kindling::Base.initialize_connection }.should raise_error(ArgumentError)
   end
 
-  it 'should return a hash with "test" as the lobby parameter' do
-    Kindling::Base.initialize_connection('test').kind_of?(Hash).should be_true
+  it 'should return an instance of Kindling::Base with "test" as the lobby parameter' do
+    Kindling::Base.initialize_connection('test').kind_of?(Kindling::Base).should be_true
   end
 
   describe 'with a lobby parameter' do
 
     before(:each) do
-      @connection = Kindling::Base.initialize_connection('test')
+      @base = Kindling::Base.initialize_connection('test')
     end
 
     it 'should set Kindling::Base.connection' do
@@ -49,15 +49,15 @@ describe Kindling::Base, '.initialize_connection' do
     end
 
     it 'should have Kindling::Base.connection[:host] return "test.campfirenow.com"' do
-      @connection[:host].should == "test.campfirenow.com"
+      @base.class.connection[:host].should == "test.campfirenow.com"
     end
 
     it 'should have Kindling::Base.connection[:port] return 80' do
-      @connection[:port].should == 80
+      @base.class.connection[:port].should == 80
     end
 
     it 'should have Kindling::Base.connection[:ssl] return false' do
-      @connection[:ssl].should be_false
+      @base.class.connection[:ssl].should be_false
     end
 
   end
@@ -79,11 +79,11 @@ describe Kindling::Base, '.initialize_connection_from_file' do
 
     before(:each) do
       @path = File.join(CONFIG_FILE_PATH, 'kindling.yml')
-      @connection = Kindling::Base.initialize_connection_from_file(@path)
+      @base = Kindling::Base.initialize_connection_from_file(@path)
     end
 
-    it 'should return a hash' do
-      @connection.kind_of?(Hash).should be_true
+    it 'should return an instance of Kindling::Base' do
+      @base.kind_of?(Kindling::Base).should be_true
     end
 
     it 'should set Kindling::Base.connection' do
@@ -91,15 +91,36 @@ describe Kindling::Base, '.initialize_connection_from_file' do
     end
 
     it 'should have Kindling::Base.connection[:host] return "test.campfirenow.com"' do
-      @connection[:host].should == "test.campfirenow.com"
+      @base.class.connection[:host].should == "test.campfirenow.com"
     end
 
     it 'should have Kindling::Base.connection[:port] return 80' do
-      @connection[:port].should == 80
+      @base.class.connection[:port].should == 80
     end
 
     it 'should have Kindling::Base.connection[:ssl] return false' do
-      @connection[:ssl].should be_false
+      @base.class.connection[:ssl].should be_false
+    end
+
+  end
+
+  describe Kindling::Base, '.new' do
+
+    it 'should raise an ArgumentError if no arguments are passed to it' do
+      lambda { Kindling::Base.new }.should raise_error(ArgumentError)
+    end
+
+    describe 'with "test" as a parameter' do
+
+      before(:each) do
+        @lobby = 'test'
+      end
+
+      it 'should set @lobby as a readable attribute' do
+        base = Kindling::Base.new(@lobby)
+        base.lobby.should == @lobby
+      end
+
     end
 
   end

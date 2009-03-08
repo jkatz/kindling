@@ -14,6 +14,8 @@ module Kindling
       :ssl => false
     }
 
+    attr_reader :lobby
+
     class << self
 
       def connection
@@ -33,6 +35,7 @@ module Kindling
           :port => url.port,
           :ssl => ssl?(url.scheme)
         }
+        self.new(lobby)
       end
 
 
@@ -65,6 +68,10 @@ module Kindling
         [scheme, '://', domain, ':', port].join
       end
 
+    end
+
+    def initialize(lobby)
+      @lobby = lobby
     end
 
   end
