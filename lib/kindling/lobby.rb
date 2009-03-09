@@ -11,7 +11,7 @@ module Kindling
       self.new(Base.initialize_connection_from_file(file_path))
     end
 
-    attr_reader :base, :rooms
+    attr_reader :rooms
 
     # setup the lobby we are going to connect to by the name of the lobby
     def initialize(base, options={})

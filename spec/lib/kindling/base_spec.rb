@@ -24,6 +24,82 @@ describe Kindling::Base, 'DEFAULT_CONNECTION_OPTIONS' do
 
 end
 
+describe Kindling::Base, '.connect!' do
+
+  it 'should exist' do
+    Kindling::Base.respond_to?(:connect!).should be_true
+  end
+
+  it 'should set @connected to true' do
+    Kindling::Base.connect!
+    Kindling::Base.connected?.should be_true
+  end
+
+end
+
+describe Kindling::Base, '.connected?' do
+
+  before(:each) do
+    Kindling::Base.disconnect!
+  end
+
+  it 'should exist' do
+    Kindling::Base.respond_to?(:connected?).should be_true
+  end
+
+  it 'should return false if Kindling::Base has not been connected' do
+    Kindling::Base.connected?.should be_false
+  end
+
+  it 'should return true if Kindling::Base has been connected' do
+    Kindling::Base.connect!
+    Kindling::Base.connected?.should be_true
+  end
+
+  it 'should return false if Kindling::Base has been connected and then disconnected' do
+    Kindling::Base.connect!
+    Kindling::Base.disconnect!
+    Kindling::Base.connected?.should be_false
+  end
+
+end
+
+describe Kindling::Base, '.cookie' do
+
+  it 'should exist' do
+    Kindling::Base.respond_to?(:cookie).should be_true
+  end
+
+end
+
+describe Kindling::Base, '.cookie=' do
+
+  it 'should exist' do
+    Kindling::Base.respond_to?(:cookie=).should be_true
+  end
+
+  it 'should set the value of @cookie' do
+    cookie = "not a real cookie"
+    Kindling::Base.cookie = cookie
+    Kindling::Base.cookie.should == cookie
+  end
+
+end
+
+describe Kindling::Base, '.disconnect!' do
+
+  it 'should exist' do
+    Kindling::Base.respond_to?(:disconnect!).should be_true
+  end
+
+  it 'should set @connected to false' do
+    Kindling::Base.disconnect!
+    Kindling::Base.connected?.should be_false
+  end
+
+end
+
+
 describe Kindling::Base, '.initialize_connection' do
 
   it 'should exist' do

@@ -2,6 +2,6 @@ Dir[File.join(File.dirname(__FILE__), 'kindling/**/*.rb')].sort.each { |lib| req
 
 module Kindling
 
-  VERSION = '0.1.1'
+  VERSION = '0.2.0'
 
 end
