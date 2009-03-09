@@ -6,6 +6,8 @@ module Kindling
 
   class Base
 
+    attr_reader :lobby
+
     DEFAULT_CONNECTION_OPTIONS = {
       :domain => '.campfirenow.com',
       :port => 80,
