@@ -12,9 +12,15 @@ module Kindling
       :ssl => false
     }
 
-    attr_reader :lobby
-
     class << self
+
+      def connect!
+        @connected = true
+      end
+
+      def connected?
+        !!@connected
+      end
 
       def connection
         @connection
@@ -26,6 +32,10 @@ module Kindling
 
       def cookie=(cookie)
         @cookie = cookie
+      end
+
+      def disconnect!
+        @connected = false
       end
 
       # configures the connection for the Campfire lobby we are connecting to
@@ -85,7 +95,7 @@ module Kindling
     end
 
     def post(path, options={})
-      HTTP.post(path, options)
+      data = HTTP.post(path, options)
     end
 
   end
