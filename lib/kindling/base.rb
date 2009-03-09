@@ -1,7 +1,5 @@
 require 'rubygems'
 require 'uri'
-require 'net/http'
-require 'net/https'
 require 'nokogiri'
 
 module Kindling
@@ -22,6 +20,14 @@ module Kindling
         @connection
       end
 
+      def cookie
+        @cookie
+      end
+
+      def cookie=(cookie)
+        @cookie = cookie
+      end
+
       # configures the connection for the Campfire lobby we are connecting to
       #
       # * +lobby+: the name of the Campfire lobby we want to connect to
@@ -29,7 +35,7 @@ module Kindling
       #   * +:ssl+: true if we are connection over SSL.  Defaults to false
       def initialize_connection(lobby, options={})
         options = DEFAULT_CONNECTION_OPTIONS.merge(options)
-        url = URI.parse(uri_for(lobby, options))
+        url = URI.parse(url_for(lobby, options))
         @connection = {
           :host => url.host,
           :port => url.port,
@@ -61,8 +67,8 @@ module Kindling
         symbol_hash
       end
 
-      def uri_for(lobby, options)
-        scheme = ssl?(options[:ssl]) ? 'https' : 'http'
+      def url_for(lobby, options)
+        scheme = options[:ssl] ? 'https' : 'http'
         domain = lobby + options[:domain]
         port = options[:port]
         [scheme, '://', domain, ':', port].join
@@ -72,6 +78,14 @@ module Kindling
 
     def initialize(lobby)
       @lobby = lobby
+    end
+
+    def get(path, options={})
+      HTTP.get(path, options)
+    end
+
+    def post(path, options={})
+      HTTP.post(path, options)
     end
 
   end
