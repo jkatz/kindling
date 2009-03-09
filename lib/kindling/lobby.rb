@@ -45,7 +45,7 @@ module Kindling
         doc.css('table.lobby a').each { |anchor|
           anchor['href'] =~ /([0-9]+)(\/?)$/
           room_id = $1
-          @rooms << Room.new(anchor.text, room_id)
+          @rooms << Room.new(room_id, anchor.text)
         }
         @rooms
       end

@@ -15,7 +15,7 @@ module Kindling
         request.add_field 'User-Agent', "Kindling/#{Kindling::VERSION} (http://github.com/jkatz/kindling)"
         request.add_field 'Cookie', Base.cookie.to_s
         request.add_field 'Content-Type', 'application/x-www-form-urlencoded'
-        yield if block
+        yield(request) if block
         perform_request(request)
       end
 
