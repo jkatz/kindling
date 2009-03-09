@@ -11,7 +11,7 @@ module Kindling
       self.new(Base.initialize_connection_from_file(file_path))
     end
 
-    attr_reader :base
+    attr_reader :base, :rooms
 
     # setup the lobby we are going to connect to by the name of the lobby
     def initialize(base, options={})
@@ -19,6 +19,7 @@ module Kindling
       @base = base.kind_of?(String) ?
         Base.initialize_connection(base, options) :
         base
+      @rooms = []
     end
 
     # disconnect from the lobby
@@ -28,6 +29,7 @@ module Kindling
     end
 
     # connect to the lobby
+    # returns an array of +Kindling::Room+ that are connectable
     def connect(email_address, password)
       response = @base.post('/login',
         :email_address => email_address,
@@ -40,6 +42,12 @@ module Kindling
         raise ConnectionError, 'failed to connect. Please verify your connection settings and your username and password'
       else
         Base.connect!
+        doc.css('table.lobby a').each { |anchor|
+          anchor['href'] =~ /([0-9]+)(\/?)$/
+          room_id = $1
+          @rooms << Room.new(anchor.text, room_id)
+        }
+        @rooms
       end
     end
 
